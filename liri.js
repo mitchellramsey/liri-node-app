@@ -29,15 +29,28 @@ function movieCall() {
     // console.log(queryURL);
     request(queryURL, function(error,response,data) {
         var movieObject = JSON.parse(data);
+        console.log(movieObject);
         if(!error && response.statusCode === 200) {
             console.log("===================================");
             console.log("Your Movie Results: ");
             console.log("===================================");
             console.log("Title: " + movieObject.Title +
                         "\nYear: " + movieObject.Year +
-                        "\nIMDB Rating: " + movieObject.imdbRating +
-                        "\nRotten Tomatoes Rating: " + movieObject.Ratings[1].Value +
-                        "\nCountry: " + movieObject.Country +
+                        "\nIMDB Rating: " + movieObject.imdbRating);
+            if(movieObject.Ratings){
+                var notRottenTomatoes = 0;            
+                for(var i = 0; i < movieObject.Ratings.length; i++){
+                    if(movieObject.Ratings[i].Source === 'Rotten Tomatoes'){
+                        console.log("Rotten Tomatoes Rating: " + movieObject.Ratings[i].Value);
+                    }else {
+                        notRottenTomatoes++;
+                        if(notRottenTomatoes === movieObject.Ratings.length){
+                            console.log("Rotten Tomatoes Rating: N/A");
+                        }
+                    }
+                }
+            }
+                console.log("Country: " + movieObject.Country +
                         "\nLanguage: " + movieObject.Language +
                         "\nPlot: "+ movieObject.Plot +
                         "\nActors: " + movieObject.Actors);
